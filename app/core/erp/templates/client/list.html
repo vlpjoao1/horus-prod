@@ -1,0 +1,72 @@
+{% extends 'list.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'client/js/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <tr>
+        <th scope="col" style="width: 10%;">Nro</th>
+        <th scope="col" style="width: 15%;">Nombres</th>
+        <th scope="col" style="width: 15%;">Apellidos</th>
+        <th scope="col" style="width: 10%;">Dni</th>
+        <th scope="col" style="width: 15%;">Fecha de nacimiento</th>
+        <th scope="col" style="width: 15%;">Sexo</th>
+        <th scope="col" style="width: 20%;">Opciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+
+{% endblock %}
+{% block buttons_list %}
+    <!-- Cambiamos funcionamiento ya que this link activara un modal -->
+    <a class="btn btn-primary btn-flat btnAdd">
+        <i class="fas fa-plus"></i>Nuevo registro
+    </a>
+    <a href="{{ list_url }}" class="btn btn-success btn-flat">
+        <i class="fas fa-sync"></i> Actualizar
+    </a>
+{% endblock %}
+{% block javascript %}
+    <div class="modal fade" id="myModalClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <!-- Enctype Multiplar for send FILES too -->
+        <form action="." method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- Modal title dinamico que cambia desde el js -->
+                        <h5 class="modal-title">
+                            <b><i class="fas fa-search"></i><span></span></b>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Send Action to View -->
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="id" value="0">
+                        <div class="container-fluid">
+                            <!-- Iterate the form -->
+                            {% for field in form.visible_fields %}
+                                <div class="form-group">
+                                    <label>{{ field.label }}</label>
+                                    <!-- Render field and add class and attr -->
+                                    {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

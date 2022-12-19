@@ -1,0 +1,81 @@
+{% extends 'login/base.html' %}
+
+{% block content %}
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="{% url 'accounts:login' %}"><b>HO</b>RUS</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Cambio de Contraseña</p>
+                <form action=".." method="post">
+                    <input type="hidden" value="{{ next }}" name="next">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        {{ form.password }}
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        {{ form.confirmPassword }}
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-lock"></i> Cambiar Password
+                            </button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <p class="text-center mt-2" style="font-size: 13px">
+                        Si deseas volver al LogIn haz click <a href="{% url 'accounts:login' %}">aquí</a>
+                    </p>
+                </form>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+        <script type="application/javascript">
+            $(function () {
+                $('form').on('submit', function (e) {
+                    e.preventDefault();
+                    //aquí hacemos referencia al formulario
+                    //Esto obtiene a forma de diccionario todos los datos del formulario
+                    //Serializa los datos obtenidos del formulario
+                    //var parameters = $(this).serializeArray();
+                    //El formdata incluye los archivos FILES, Le pasamos el formulario como argumento
+                    var parameters = new FormData(this);
+                    // new FormData($('form')[0]) -> Si tenemos varios formularios y queremos escoger 1
+                    //parameters.forEach((key,value)=>console.log(key+':'+value)); -> si queremos iterar cada valor
+                    submit_with_ajax(window.location.pathname, 'Notificación', '¿Estás seguro de cambiar tu contraseña?', parameters, function () {
+                        Swal.fire({
+                            title: 'Alerta!',
+                            text: 'Tu contraseña ha sido cambiada correctamente!',
+                            icon: 'success',
+                            //Se cierra a los 2 segundos
+                            timer: 4000,
+                            //Cuando se cierre se ejecute la funcion
+                            onClose: () => {
+                                location.href = '{{login_url}}'
+                            },
+                        });/*.then(() => { //cuando presionamos OK
+                            location.href = '
+                        //
+                        {{ list_url }}'
+                        });*/
+                        //location.href = '/'
+                    });
+                });
+            });
+        </script>
+    </div>
+    <!-- /.login-box -->
+{% endblock %}

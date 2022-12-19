@@ -1,0 +1,186 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block head %}
+    <!-- JQUERY UI AUTOCOMPLETE-->
+    <link rel="stylesheet" href="{% static 'lib/jquery-ui-1.13.2/jquery-ui.min.css' %}">
+    <script src="{% static 'lib/jquery-ui-1.13.2/jquery-ui.min.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
+    {# Para poder cargar el tema de bootstrap #}
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    {# Para escoger el idioma #}
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <form action="." method="POST" enctype="multipart/form-data">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-plus"></i>
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Categorias</label>
+                    {{ form.categories }}
+                </div>
+                <div class="form-group">
+                    <label>Productos</label>
+                    {{ form.products }}
+                </div>
+                <div class="form-group">
+                    <label>Buscador</label>
+                    {{ form.search }}
+                </div>
+                <div class="form-group">
+                    <label>Buscador Select2</label>
+                    {{ form.search2 }}
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+        /* Declaramos los productos desde el inicio */
+        var select_products = $('select[name="products"]');
+        $(() => {
+            $('.select2').select2({
+                //podemos escoger temas para el select2
+                theme: 'bootstrap4',
+                language: 'es'
+            });
+            //Ajax charge values o anidated select
+            $('select[name="categories"]').on('change', function () {
+                var id = $(this).val();
+                //Creamos las opciones del select
+                var options = '<option value="">-----------</option>';
+                /* Para evitar mandar valores con id vacío
+                * */
+                if (id === '') {
+                    select_products.html(options);
+                    //terminamos el proceso aquí
+                    return false;
+                }
+                $.ajax({
+                    url: window.location.pathname, //window.location.pathname
+                    type: 'POST',
+                    data: {
+                        'action': 'search_product_id',
+                        'id': id
+                    },
+                    dataType: 'json',
+                }).done(function (data) {
+                    if (!data.hasOwnProperty('error')) {
+                        // iteramos una colección de elementos
+                        //iteramos por los dos valores
+                        /*$.each(data, function (key, value) {
+                            options += '<option value="' + value.id + '">' + value.name + '</option>'
+                        });*/
+                        // lo limpiamos e inicializmos el formulario
+                        select_products.html('').select2({
+                            //podemos escoger temas para el select2
+                            theme: 'bootstrap4',
+                            language: 'es',
+                            //Le pasamos la data desde aquí
+                            data: data
+                        });
+                        return false;
+                    }
+                    message_error(data.error);
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus + ': ' + errorThrown);
+                }).always(function (data) {
+                    /* Le pasamos los elementos que iteramos */
+                    //select_products.html(options);
+                });
+            });
+
+            //JQUERY UI AUTOCOMPLETE
+            // https://api.jqueryui.com/autocomplete/
+            /*var availableTags = [
+                "ActionScript",
+                "AppleScript",
+                "Asp",
+                "BASIC",
+                "C",
+                "C++",
+                "Clojure",
+                "COBOL",
+                "ColdFusion",
+                "Erlang",
+                "Fortran",
+                "Groovy",
+                "Haskell",
+                "Java",
+                "JavaScript",
+                "Lisp",
+                "Perl",
+                "PHP",
+                "Python",
+                "Ruby",
+                "Scala",
+                "Scheme"
+            ];*/
+            $('input[name="search"]').autocomplete({
+                //source: availableTags,
+                source: function (request, response) {
+                    $.ajax({
+                        url: window.location.pathname,
+                        type: 'POST',
+                        data: {
+                            'action': 'autocomplete',
+                            //De esta manera obtenemos lo que el buscador esta escribiendo
+                            'term': request.term
+                        },
+                        dataType: 'json',
+                    }).done(function (data) {
+                        // Especificamos que la respuesta es el array de datos obtenido del ajax
+                        response(data);
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        //alert(textStatus + ': ' + errorThrown);
+                    }).always(function (data) {
+                    });
+                },
+                //The delay is needed for reduce the charge of server
+                delay: 500,
+                minLength: 3,
+                // Cuando seleccionamos la palabra se ejecutara esta funcion
+                select: function (event, ui) {
+                    console.log(ui);
+                }
+            });
+
+            //Autocomplete con SELECT 2
+            $('select[name="search2"]').select2({
+                //podemos escoger temas para el select2
+                theme: 'bootstrap4',
+                language: 'es',
+                // Permite borrar la seleccion actual
+                allowClear:true,
+                //https://select2.org/data-sources/ajax
+                ajax: {
+                    delay: 250,
+                    type: 'POST',
+                    url: window.location.pathname,
+                    data: function (params) {
+                        console.log(params);
+                        var queryParameters = {
+                            term: params.term,
+                            action: 'autocomplete2'
+                        }
+                        return queryParameters;
+                    },
+                    //Transformamos los daatos recibidos de la VISTA al formato esperado por SELECT2, similar a DONE()
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                },
+                placeholder: 'Busca una categoria',
+                minimumInputLength: 1,
+            });
+        })
+    </script>
+{% endblock %}

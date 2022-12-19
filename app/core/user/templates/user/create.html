@@ -1,0 +1,16 @@
+{% extends 'form.html' %}
+{% load static %}
+{% block head %}
+    <!-- JQUERY UI AUTOCOMPLETE-->
+    <link rel="stylesheet" href="{% static 'lib/jquery-ui-1.13.2/jquery-ui.min.css' %}">
+    <script src="{% static 'lib/jquery-ui-1.13.2/jquery-ui.min.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
+    {# Para poder cargar el tema de bootstrap #}
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    {# Para escoger el idioma #}
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+    {# Propio #}
+    <script src="{% static 'user/js/form.js' %}"></script>
+{% endblock %}

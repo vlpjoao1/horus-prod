@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <form action="." method="POST">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-trash"></i>
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body">
+                {% csrf_token %}
+                <!-- ACTION -->
+                <input type="hidden" name="action" value="{{ action }}">
+                <!-- ERRORS -->
+                {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al guardar el registro!</h5>
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="alert alert-danger alert-dismissible">
+                    <h5><i class="icon fas fa-ban"></i> Notificación!</h5>
+                    ¿Estás seguro de eliminar el registro nro {{ object.pk }}?
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary btn-flat btnTest">
+                    <i class="fas fa-edit"></i>Si, aceptar
+                </button>
+                <a href="{{ list_url }}" class="btn btn-primary btn-flat btnTest">
+                    <i class="fas fa-trash-alt"></i>Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+    <script>
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            //aquí hacemos referencia al formulario
+            //Esto obtiene a forma de diccionario todos los datos del formulario
+            var parameters = new FormData(this);
+            // new FormData($('form')[0]) -> Si tenemos varios formularios y queremos escoger 1
+            //parameters.forEach((key,value)=>console.log(key+':'+value)); ->    si queremos iterar cada valor
+            submit_with_ajax(window.location.pathname, 'Notificación', '¿Estás seguro de que deseas realizar la siguiente acción?', parameters, function () {
+                Swal.fire({
+                    title: 'Alerta!',
+                    text: 'Registro eliminado exitosamente.',
+                    icon: 'success',
+                    //Se cierra a los 2 segundos
+                    timer:2000,
+                    //Cuando se cierre se ejecute la funcion
+                    onClose: () => {
+                        location.href = '{{ list_url }}'
+                    },
+                });/*.then(() => { //cuando presionamos OK
+                    location.href = '
+                {{ list_url }}'
+                });*/
+            });
+        });
+    </script>
+{% endblock %}
