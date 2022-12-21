@@ -41,6 +41,8 @@ $(function () {
         ajax: {
             url: window.location.pathname,
             type: 'POST',
+            //enviamos el csrf_token a la vista para la seguridad
+            headers: {'X-CSRFToken': csrftoken},
             data: {
                 'action': 'searchdata'
             },
@@ -116,6 +118,7 @@ $(function () {
                     url: window.location.pathname,
                     type: 'POST',
                     //Enviamos los parametros de busqueda a la vista
+                    headers: {'X-CSRFToken': csrftoken},
                     data: {
                         'action': 'search_details_prod',
                         'id': data.id

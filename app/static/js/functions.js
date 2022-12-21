@@ -1,4 +1,25 @@
-function message_error(obj, title='Error', icon='error') {
+//https://docs.djangoproject.com/en/3.2/ref/csrf/
+/*Esto se usara para obtener el csrf del sitio y poder enviarlo a las vistas
+* se usara para enviar el csrf a traves de ajax*/
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+function message_error(obj, title = 'Error', icon = 'error') {
     //pasamos el objeto, y lo iteremos con each,
     //como es un diccionario usaremos una funcion y le pasaremos la clave y valor
     var html = '';
@@ -41,6 +62,8 @@ function submit_with_ajax(url, title, content, parameters, callback) {
                         url: url, //window.location.pathname
                         type: 'POST',
                         data: parameters,
+                        // Pasamos el csrftoken por ajax para la vista
+                        headers: {'X-CSRFToken': csrftoken},
                         dataType: 'json',
                         /* Esto se agrega al momento de enviar FILES en el formulario */
                         //Para que los datos enviados se transformen en un string
@@ -48,7 +71,7 @@ function submit_with_ajax(url, title, content, parameters, callback) {
                         //Que no configure el tipo de dato recibido del servidor
                         contentType: false,
                     }).done(function (data) {
-                        console.log(data,'Functions.js');
+                        console.log(data, 'Functions.js');
                         if (!data.hasOwnProperty('error')) {
                             // Le enviamos los datos del ajax a la funcion para poder obtener el ID
                             callback(data);

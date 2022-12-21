@@ -12,6 +12,8 @@ function getData() {
         ajax: {
             url: window.location.pathname,
             type: 'POST',
+            //enviamos el csrf_token a la vista para la seguridad
+            headers: {'X-CSRFToken': csrftoken},
             data: {
                 'action': 'searchdata'
             },//parameters

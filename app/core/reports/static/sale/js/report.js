@@ -21,6 +21,8 @@ function generate_report(start_date, end_date) {
         ajax: {
             url: window.location.pathname,
             type: 'POST',
+            // Pasamos el csrftoken por ajax para la vista
+            headers: {'X-CSRFToken': csrftoken},
             data: parameters,
             dataSrc: ""
         },

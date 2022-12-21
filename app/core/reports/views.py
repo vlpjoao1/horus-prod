@@ -17,7 +17,7 @@ from core.reports.forms import ReportForm
 class ReportSaleView(TemplateView):
     template_name = 'sale/report.html'
 
-    @method_decorator(csrf_exempt)
+    #@method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 

@@ -16,7 +16,7 @@ from core.erp.models import Sale, Product, DetSale
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
 
-    @method_decorator(csrf_exempt)
+    #@method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 

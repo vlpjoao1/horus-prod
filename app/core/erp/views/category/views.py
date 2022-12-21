@@ -31,9 +31,10 @@ class CategoryList(ValidatePermissionRequiredMixin, ListView):
     # dispatch: Es un metodo que se ejecuta al principio de la llamada de una vista. Se encarga de
     # redireccionar a la peticion que se haga, sea post o get.
     # @method_decorator(login_required)
-    @method_decorator(csrf_exempt)
+    # @method_decorator(csrf_exempt)
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        print('hola')
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

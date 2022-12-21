@@ -69,7 +69,7 @@ class ResetPasswordView(FormView):
     template_name = 'login/resetpwd.html'
     success_url = reverse_lazy('dashboard')
 
-    @method_decorator(csrf_exempt)
+    #@method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -152,7 +152,7 @@ class ChangePasswordView(FormView):
     template_name = 'login/changepwd.html'
     success_url = reverse_lazy('dashboard')
 
-    @method_decorator(csrf_exempt)
+    #@method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 

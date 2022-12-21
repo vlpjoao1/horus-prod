@@ -205,13 +205,15 @@ $(function () {
             $.ajax({
                 url: window.location.pathname,
                 type: 'POST',
+                //Le pasamos el csrf para que la vista lo reciba
+                headers: {'X-CSRFToken': csrftoken},
                 data: {
                     'action': 'search_products',
                     //De esta manera obtenemos lo que el buscador esta escribiendo
                     'term': request.term,
                     //le pasamos los ids que va a excluir a la consulta
                     /*https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify*/
-                    ids : JSON.stringify(vents.get_ids())
+                    ids: JSON.stringify(vents.get_ids())
                 },
                 dataType: 'json',
             }).done(function (data) {
@@ -247,16 +249,18 @@ $(function () {
         allowClear: true,
         //https://select2.org/data-sources/ajax
         ajax: {
-            delay: 250,
+            delay: 500,
             type: 'POST',
             url: window.location.pathname,
+            //Le pasamos el csrf para que la vista lo reciba
+            headers: {'X-CSRFToken': csrftoken},
             data: function (params) {
                 var queryParameters = {
                     term: params.term,
                     action: 'search_products_select2',
                     //le pasamos los ids que va a excluir a la consulta
                     /*https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify*/
-                    ids : JSON.stringify(vents.get_ids())
+                    ids: JSON.stringify(vents.get_ids())
                 }
                 return queryParameters;
             },
@@ -295,9 +299,11 @@ $(function () {
         allowClear: true,
         //https://select2.org/data-sources/ajax
         ajax: {
-            delay: 250,
+            delay: 500,
             type: 'POST',
             url: window.location.pathname,
+            //Le pasamos el csrf para que la vista lo reciba
+            headers: {'X-CSRFToken': csrftoken},
             data: function (params) {
                 console.log(params);
                 var queryParameters = {
@@ -434,11 +440,13 @@ $(function () {
             ajax: {
                 url: window.location.pathname,
                 type: 'POST',
+                //Le pasamos el csrf para que la vista lo reciba
+                headers: {'X-CSRFToken': csrftoken},
                 data: {
                     'action': 'search_products',
                     //Pasamos el valor del formulario como termino de busqueda
                     'term': $('input[name="search"]').val(),
-                    ids : JSON.stringify(vents.get_ids())
+                    ids: JSON.stringify(vents.get_ids())
                 },
                 dataSrc: ""
             },
@@ -502,11 +510,13 @@ $(function () {
             ajax: {
                 url: window.location.pathname,
                 type: 'POST',
+                //Le pasamos el csrf para que la vista lo reciba
+                headers: {'X-CSRFToken': csrftoken},
                 data: {
                     'action': 'search_products',
                     //Pasamos el valor del formulario como termino de busqueda
                     'term': $('select[name="search"]').val(),
-                    ids : JSON.stringify(vents.get_ids())
+                    ids: JSON.stringify(vents.get_ids())
                 },
                 dataSrc: ""
             },

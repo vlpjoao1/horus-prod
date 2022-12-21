@@ -8,6 +8,8 @@ $(function () {
         ajax: {
             url: window.location.pathname,
             type: 'POST',
+            // Pasamos el csrftoken por ajax para la vista
+            headers: {'X-CSRFToken': csrftoken},
             data: {
                 'action': 'searchdata'
             },//parameters
