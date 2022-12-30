@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
@@ -102,3 +103,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['panel'] = 'Panel de administrador'
         # context['graph_sales_year_month'] = self.get_graph_sales_year_month()
         return context
+
+def page_not_found404(request, exception):
+    return render(request, '404.html')

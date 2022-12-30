@@ -23,6 +23,11 @@ from core.login.views import LoginFormView2, LoginFormView
 from django.conf import settings
 from django.conf.urls.static import static
 
+from django.conf.urls import handler404
+from core.erp.views.dashboard.views import page_not_found404
+
+handler404 = page_not_found404
+
 urlpatterns = [
     # path('', IndexView.as_view(), name='index'),
     path('', DashboardView.as_view(), name='dashboard'),
