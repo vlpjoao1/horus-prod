@@ -14,3 +14,17 @@
     {# Propio #}
     <script src="{% static 'user/js/form.js' %}"></script>
 {% endblock %}
+{% block javascript %}
+    <script>
+        // File size validation
+        var uploadField = document.querySelector("input[type=file]");
+        uploadField.onchange = function () {
+            //1MB
+            if (this.files[0].size > 1048576) {
+                message_error('El tamaño de la foto no debe superar 1MB');
+                this.value = "";
+            }
+            ;
+        };
+    </script>
+{% endblock %}
