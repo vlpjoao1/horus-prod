@@ -115,8 +115,8 @@ $(function () {
     //End-Editar Cliente-----------------------
 
     //Cuando se oculte el modal ejecute esta funcion
-    $('#myModalClient').on('shown.bs.modal', function () {
-        //$('form')[0].reset();
+    $('#myModalClient').on('hidden.bs.modal', function () {
+        $('form')[0].reset();
     });
 
     $('form').on('submit', function (e) {

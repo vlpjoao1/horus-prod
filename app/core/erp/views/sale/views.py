@@ -456,7 +456,7 @@ class SaleInvoicePdfView(LoginRequiredMixin, View):
                 'address': 'Carlos Perez'
             },
             # debido a que no funcionaba con (settings.STATIC_URL,'img') lo hice asi
-            'icon': '{}{}'.format(settings.BASE_DIR, '/static/img/logo.png')
+            'icon': '{}{}'.format(settings.BASE_DIR, '/static/img/logo_horus.png')
         }
         # response['Content-Disposition'] = 'attachment; filename="report.pdf"'  # Va a tener este nombre
         # https://docs.djangoproject.com/en/3.0/topics/templates/

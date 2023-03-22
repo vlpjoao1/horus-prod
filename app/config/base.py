@@ -29,10 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-_&ig-9zewpb8!lw#ov_o8sa1q0ggoydlj&y$)9&)*cer5+qbl0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
-#Comentario agregado al allowed host
-ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -87,7 +84,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-#DATABASES = db.SQLITE
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -121,7 +117,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
 """Cuando ejecutamos COLLECTSTATIC para poner todos los archivos
 estaticos en una sola carpetatenemos que definir a que carpeta iran esos archivos en STATIC_ROOT"""
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/') #BASE_DIR obtencion de la ruta del directorio
