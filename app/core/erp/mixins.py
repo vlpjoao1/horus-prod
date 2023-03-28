@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 # Hereda de object que es la clase base de toda clase Python
 from django.urls import reverse_lazy
 
-from config import settings
+from app.config import settings
 
 
 class IsSuperuserMixin(object):

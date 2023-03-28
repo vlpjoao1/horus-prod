@@ -11,7 +11,7 @@ from core.erp.models import Client
 
 
 class ClientView(ValidatePermissionRequiredMixin,TemplateView):
-    permission_required = 'erp.view_client'
+    permission_required = 'view_client'
     template_name = 'client/list.html'
 
     #@method_decorator(csrf_exempt)
@@ -24,6 +24,7 @@ class ClientView(ValidatePermissionRequiredMixin,TemplateView):
         try:
             action = request.POST['action']
             if action == 'searchdata':
+
                 data = []
                 for i in Client.objects.all():
                     data.append(i.toJSON())
@@ -34,15 +35,18 @@ class ClientView(ValidatePermissionRequiredMixin,TemplateView):
                     abriendo un modal que no pertenece a una vista y estamos pasando el form
                     desde el get_context_data y no como un formulario de la vista
                 """
-                #recuperamos todos los valores del cliente
-                cli = Client()
-                cli.names = request.POST['names']
-                cli.surnames = request.POST['surnames']
-                cli.dni = request.POST['dni']
-                cli.date_birthday = request.POST['date_birthday']
-                cli.address = request.POST['address']
-                cli.gender = request.POST['gender']
-                cli.save()
+                if request.user.has_perms('add_client'):
+                    #recuperamos todos los valores del cliente
+                    cli = Client()
+                    cli.names = request.POST['names']
+                    cli.surnames = request.POST['surnames']
+                    cli.dni = request.POST['dni']
+                    cli.date_birthday = request.POST['date_birthday']
+                    cli.address = request.POST['address']
+                    cli.gender = request.POST['gender']
+                    cli.save()
+                else:
+                    data['error'] = "No tienes los permisos para acceder a este modulo."
             elif action == 'edit':
                 """
                     Manejamos los datos con request.POST y no con get_form ya que
@@ -50,19 +54,25 @@ class ClientView(ValidatePermissionRequiredMixin,TemplateView):
                     abriendo un modal que no pertenece a una vista y estamos pasando el form
                     desde el get_context_data y no como un formulario de la vista
                 """
-                #Nuestra instancia sera una consulta, debe ser una consulta
-                cli = Client.objects.get(pk=request.POST['id'])
-                #recuperamos todos los valores del cliente
-                cli.names = request.POST['names']
-                cli.surnames = request.POST['surnames']
-                cli.dni = request.POST['dni']
-                cli.date_birthday = request.POST['date_birthday']
-                cli.address = request.POST['address']
-                cli.gender = request.POST['gender']
-                cli.save()
+                if request.user.has_perms('change_client'):
+                    #Nuestra instancia sera una consulta, debe ser una consulta
+                    cli = Client.objects.get(pk=request.POST['id'])
+                    #recuperamos todos los valores del cliente
+                    cli.names = request.POST['names']
+                    cli.surnames = request.POST['surnames']
+                    cli.dni = request.POST['dni']
+                    cli.date_birthday = request.POST['date_birthday']
+                    cli.address = request.POST['address']
+                    cli.gender = request.POST['gender']
+                    cli.save()
+                else:
+                    data['error'] = "No tienes los permisos para acceder a este modulo."
             elif action == 'delete':
-                cli = Client.objects.get(pk=request.POST['id'])
-                cli.delete()
+                if request.user.has_perms('change_client'):
+                    cli = Client.objects.get(pk=request.POST['id'])
+                    cli.delete()
+                else:
+                    data['error'] = "No tienes los permisos para acceder a este modulo."
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
